@@ -1,7 +1,7 @@
 from gpiozero import DistanceSensor, LED
 from signal import pause
 
-threshold_distancecm=11 # cm
+threshold_distancecm=20 # cm
 
 threshold_distance = threshold_distancecm/100
 
