@@ -3,15 +3,21 @@ from time import sleep
 from gpiozero import LED
 from gpiozero.tools import booleanized
 from signal import pause
+from gpiozero.pins.pigpio import PiGPIOFactory
+       
+factory = PiGPIOFactory()
+threshold_distance_cm=10
+hysteresis_cm=2
 
-threshold_distance=0.3
- 
-lsensor = DistanceSensor(echo=5,  trigger=6,  threshold_distance=threshold_distance, queue_len=4)
-rsensor = DistanceSensor(echo=13, trigger=26, threshold_distance=threshold_distance, queue_len=4)
-ledl=LED(12)
-ledr=LED(16)
+threshold_distance=threshold_distance_cm/100.0
+hysteresis=hysteresis_cm/100.0
 
-#while True:
+#lsensor = DistanceSensor(echo=5,  trigger=6,  threshold_distance=threshold_distance, queue_len=4)
+rsensor = DistanceSensor(echo=13, trigger=26, threshold_distance=threshold_distance, queue_len=9, pin_factory=factory)
+#ledl=LED(12)
+#ledr=LED(16)
+
+while True:
 
 #    print('Distance to nearest l object is', lsensor.distance*100, "cm ", lsensor.value)
 #    if lsensor.value < threshold_distance:
@@ -20,16 +26,20 @@ ledr=LED(16)
 #        ledl.off()
 
 #    ledl.value=lsensor.value < threshold_distance
-
-#    print('Distance to nearest r object is', rsensor.distance*100, 'cm ', rsensor.value)
+    x=booleanized(rsensor,threshold_distance,1,hysteresis=hysteresis) 
+ 
+    dist=f'{rsensor.distance*100:.3f} cm'
+    print('Distance to nearest r object is '+dist, next(x) )
 #    if rsensor.value < threshold_distance:
 #        ledr.on()
 #    else:
 #        ledr.off()
 #    ledr.value=rsensor.value < threshold_distance
-#    sleep(0.01)
+    sleep(0.01)
 
-ledl.source=booleanized(lsensor,0,threshold_distance)
-ledr.source=booleanized(rsensor,0,threshold_distance)
+#ledl.source=booleanized(lsensor,0,threshold_distance)
+#ledr.source=booleanized(rsensor,0,threshold_distance)
 
 pause()
+
+
