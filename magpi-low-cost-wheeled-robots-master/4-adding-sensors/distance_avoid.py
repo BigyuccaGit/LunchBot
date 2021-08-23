@@ -1,6 +1,7 @@
 from signal import pause
 import atexit
 import gpiozero
+import time
 from gpiozero.tools import scaled, negated, booleanized
 from gpiozero.pins.pigpio import PiGPIOFactory
 
@@ -17,11 +18,22 @@ hysteresis=hysteresis_cm/100.0
 factory = PiGPIOFactory()
 
 # Instantiate robot
-robot = gpiozero.Robot(left=(27, 17), right=(24, 23))
+robot = gpiozero.Robot(right=(27, 17), left=(24, 23))
+
+#robot.right_motor.forward()
+#time.sleep(5.0)
+#robot.right_motor.stop()
+
+#robot.left_motor.forward() 
+#time.sleep(5.0) 
+#robot.left_motor.stop() 
  
+#if 1==1:
+#  pause()
+
 # Instantiate sensors
-left_distance_sensor  = gpiozero.DistanceSensor(echo=5,  trigger=6,  max_distance=1, threshold_distance=threshold_distance, queue_len=queue_len, pin_factory=factory)
-right_distance_sensor = gpiozero.DistanceSensor(echo=13, trigger=26, max_distance=1, threshold_distance=threshold_distance, queue_len=queue_len, pin_factory=factory)
+right_distance_sensor  = gpiozero.DistanceSensor(echo=5,  trigger=6,  max_distance=1, threshold_distance=threshold_distance, queue_len=queue_len, pin_factory=factory)
+left_distance_sensor = gpiozero.DistanceSensor(echo=13, trigger=26, max_distance=1, threshold_distance=threshold_distance, queue_len=queue_len, pin_factory=factory)
 
 # Ensure it will stop
 atexit.register(robot.stop)

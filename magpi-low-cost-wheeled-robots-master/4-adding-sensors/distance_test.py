@@ -7,13 +7,13 @@ from gpiozero.pins.pigpio import PiGPIOFactory
        
 factory = PiGPIOFactory()
 threshold_distance_cm=10
-hysteresis_cm=2
+hysteresis_cm=0
 
 threshold_distance=threshold_distance_cm/100.0
 hysteresis=hysteresis_cm/100.0
 
-#lsensor = DistanceSensor(echo=5,  trigger=6,  threshold_distance=threshold_distance, queue_len=4)
-rsensor = DistanceSensor(echo=13, trigger=26, threshold_distance=threshold_distance, queue_len=9, pin_factory=factory)
+rsensor = DistanceSensor(echo=5,  trigger=6,  threshold_distance=threshold_distance, queue_len=4, pin_factory=factory)
+lsensor = DistanceSensor(echo=13, trigger=26, threshold_distance=threshold_distance, queue_len=9, pin_factory=factory)
 #ledl=LED(12)
 #ledr=LED(16)
 
@@ -27,9 +27,12 @@ while True:
 
 #    ledl.value=lsensor.value < threshold_distance
     x=booleanized(rsensor,threshold_distance,1,hysteresis=hysteresis) 
+    y=booleanized(lsensor,threshold_distance,1,hysteresis=hysteresis) 
  
     dist=f'{rsensor.distance*100:.3f} cm'
-    print('Distance to nearest r object is '+dist, next(x) )
+    print('Distance to nearest r object is '+ dist, next(x) )
+    dist=f'{lsensor.distance*100:.3f} cm'
+    print('Distance to nearest l object is '+ dist, next(y) )
 #    if rsensor.value < threshold_distance:
 #        ledr.on()
 #    else:
