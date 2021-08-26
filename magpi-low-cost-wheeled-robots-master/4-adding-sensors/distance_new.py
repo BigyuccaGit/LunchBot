@@ -52,7 +52,8 @@ def random_spin():
 spin_options=[random_spin, left_spin, right_spin, random_spin]
 def choose_spin(r_in_range, l_in_range):
   option = r_in_range << 1 + l_in_range
-  spin_option[option]()
+  #spin_option[option]()
+  return option
   
 # Ensure it will stop
 atexit.register(robot.stop)
@@ -68,7 +69,8 @@ while True:
   
   #  print(r_sensor.in_range, r_sensor.distance*100, l_sensor.in_range, l_sensor.distance*100)
     sleep(0.01) 
-  
+
+  spin_option=choose_spin((r_sensor_in_range, l_sensor_in_range)
   print("STOP")
   robot.stop()
 
@@ -80,7 +82,7 @@ while True:
 
   print("SPIN")
   #random_spin()
-  choose_spin(r_sensor_in_range, l_sensor_in_range)
+  spin_option()
   #coin=random.randint(0,1)
   #if coin == 0: 
   #  robot.left_motor.forward()
