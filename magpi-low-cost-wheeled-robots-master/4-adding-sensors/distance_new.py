@@ -49,7 +49,7 @@ coin_toss=[left_spin, right_spin)]
 def random_spin():
   coin_toss[random.randint(0,1)]()
 
-spin_options=[left_spin, right_spin, random_spin]
+spin_options=[random_spin, left_spin, right_spin, random_spin]
 def choose_spin(r_in_range, l_in_range):
   option = r_in_range << 1 + l_in_range
   spin_option[option]()
