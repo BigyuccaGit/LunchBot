@@ -26,15 +26,38 @@ robot = gpiozero.Robot(right=(27, 17), left=(24, 23))
 r_sensor  = gpiozero.DistanceSensor(echo=5,  trigger=6,  max_distance=1, threshold_distance=threshold_distance, queue_len=queue_len, pin_factory=factory)
 l_sensor = gpiozero.DistanceSensor(echo=13, trigger=26, max_distance=1, threshold_distance=threshold_distance, queue_len=queue_len, pin_factory=factory)
 
+# Set up main operations
+
+def backwards:
+  robot.backward()
+  sleep(1.0)
+  robot.stop()    
+  
+def right_spin():
+  robot.left_motor.forward()
+  robot.right_motor.backward()
+  sleep(1.0)
+  robot.stop()
+  
+def left_spin():
+  robot.right_motor.forward()
+  robot.left_motor.backward()
+  sleep(1.0)
+  robot.stop()
+  
+coin_toss=[left_spin, right_spin)]
+def random_spin():
+  coin_toss[random.randint(0,1)]()
+
+spin_options=[left_spin, right_spin, random_spin]
+def choose_spin(r_in_range, l_in_range):
+  option = r_in_range << 1 + l_in_range
+  spin_option[option]()
+  
 # Ensure it will stop
 atexit.register(robot.stop)
 
-# Source/value setup so opposite motor reverses when object detected, thus robot turns away
-#robot.right_motor.source = scaled(booleanized(left_distance_sensor,threshold_distance,1), -speed, speed)
-#robot.left_motor.source = scaled(booleanized(right_distance_sensor,threshold_distance,1), -speed, speed)
-
 # Wait for something to happen
-#pause()
 
 while True:
   print("FORWARD")
@@ -50,17 +73,20 @@ while True:
   robot.stop()
 
   print("BACKWARD")
-  robot.backward()
-  sleep(1.0)
-  robot.stop()  
+  backwards()
+  #robot.backward()
+  #sleep(1.0)
+  #robot.stop()  
 
   print("SPIN")
-  coin=random.randint(0,1)
-  if coin == 0: 
-    robot.left_motor.forward()
-    robot.right_motor.backward()
-  else:
-    robot.right_motor.forward()
-    robot.left_motor.backward()
-  sleep(1.0)
-  robot.stop()
+  #random_spin()
+  choose_spin(r_sensor_in_range, l_sensor_in_range)
+  #coin=random.randint(0,1)
+  #if coin == 0: 
+  #  robot.left_motor.forward()
+  #  robot.right_motor.backward()
+  #else:
+  #  robot.right_motor.forward()
+  #  robot.left_motor.backward()
+  #sleep(1.0)
+  #robot.stop()
