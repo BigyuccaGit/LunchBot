@@ -31,8 +31,8 @@ while True:
  
     dist=f'{rsensor.distance*100:.3f} cm'
     print('Distance to nearest r object is '+ dist, next(x) )
-    dist=f'{lsensor.distance*100:.3f} cm'
-    print('Distance to nearest l object is '+ dist, next(y) )
+#    dist=f'{lsensor.distance*100:.3f} cm'
+#    print('Distance to nearest l object is '+ dist, next(y) )
 #    if rsensor.value < threshold_distance:
 #        ledr.on()
 #    else:
