@@ -1,0 +1,58 @@
+import gpiozero 
+import atexit
+from gpiozero.pins.pigpio import PiGPIOFactory
+from gpiozero import DistanceSensor, DistanceSensorNoEcho
+
+class Robot:
+    def __init__(self):
+        self.right_motor = gpiozero.Motor(forward=27, backward=17)
+        self.left_motor= gpiozero.Motor(forward=24, backward=23)
+
+        # Setup The Distance Sensors
+
+        factory = PiGPIOFactory()
+        self.left_distance_sensor = DistanceSensor(echo=13, trigger=26, queue_len=2, pin_factory=factory)
+        self.right_distance_sensor = DistanceSensor(echo=5, trigger=6, queue_len=2, pin_factory=factory)
+
+        # ensure the motors get stopped when the code exits
+        atexit.register(self.stop)
+
+    def convert_speed(self, motor, speed):
+        # Choose the running mode
+        operation = motor.stop
+        if speed > 0:
+            operation = motor.forward
+        elif speed < 0:
+            operation = motor.backward
+        
+        return operation
+
+    def perform(self, operation, speed):
+        if speed != 0:
+            print("Calling non stop", speed)
+            operation(abs(speed)/100.0)
+        else:
+            print("Calling stop")
+            operation()
+    
+    def left_motor_speed(self, speed):
+        operation = self.convert_speed(self.left_motor, speed)
+        self.perform(operation, speed)
+        
+    def right_motor_speed(self, speed):
+        operation = self.convert_speed(self.right_motor, speed)
+        self.perform(operation, speed)
+        
+    def stop(self):
+        self.left_motor.stop()
+        self.right_motor.stop()
+
+    def forward(self, speed=100):
+        self.left_motor_speed(speed)
+        self.right_motor_speed(speed)
+
+    def backward(self, speed=100):
+        self.left_motor_speed(-speed)
+        self.right_motor_speed(-speed)
+  
+        
