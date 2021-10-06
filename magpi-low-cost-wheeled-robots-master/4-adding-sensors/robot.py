@@ -15,7 +15,7 @@ class Robot:
         self.right_distance_sensor = DistanceSensor(echo=5, trigger=6, queue_len=2, pin_factory=factory)
 
         # ensure the motors get stopped when the code exits
-        atexit.register(self.stop)
+        atexit.register(self.stop_all)
 
     def get_operation(self, motor, speed):
         # Choose the operation
@@ -58,5 +58,10 @@ class Robot:
     def backward(self, speed=100):
         self.left_motor_speed(-speed)
         self.right_motor_speed(-speed)
+
+    def stop_all(self):
+        self.stop()
+
+        # add any more h/ww stops here
   
         
