@@ -17,8 +17,8 @@ class Robot:
         # ensure the motors get stopped when the code exits
         atexit.register(self.stop)
 
-    def convert_speed(self, motor, speed):
-        # Choose the running mode
+    def get_operation(self, motor, speed):
+        # Choose the operation
         operation = motor.stop
         if speed > 0:
             operation = motor.forward
@@ -35,13 +35,17 @@ class Robot:
             print("Calling stop")
             operation()
     
-    def left_motor_speed(self, speed):
-        operation = self.convert_speed(self.left_motor, speed)
+    def left_motor_speed(self, speed=100):
+        operation = self.get_operation(self.left_motor, speed)
         self.perform(operation, speed)
         
-    def right_motor_speed(self, speed):
-        operation = self.convert_speed(self.right_motor, speed)
+    def right_motor_speed(self, speed=100):
+        operation = self.get_operation(self.right_motor, speed)
         self.perform(operation, speed)
+
+    def speeds(self, left_speed=100, right_speed=100):
+        self.left_motor_speed(left_speed)
+        self.right_motor_speed(right_speed)
         
     def stop(self):
         self.left_motor.stop()
