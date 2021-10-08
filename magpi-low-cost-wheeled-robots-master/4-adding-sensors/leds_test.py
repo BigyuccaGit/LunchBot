@@ -1,16 +1,16 @@
-from robot import Robot
+from leds_led_shim import Leds
 from time import sleep
 
-bot = Robot()
+leds = Leds()
 red = (255, 0, 0)
 blue = (0, 0, 255)
 
 while True:
     print("red")
-    bot.leds.set_all(red)
-    bot.leds.show()
+    leds.set_all(red)
+    leds.show()
     sleep(0.5)
     print("blue")
-    bot.leds.set_all(blue)
-    bot.leds.show()
+    leds.set_all(blue)
+    leds.show()
     sleep(0.5)

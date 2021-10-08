@@ -1,15 +1,15 @@
 from time import sleep
-from robot import Robot
+from leds_led_shim import Leds
 from led_rainbow import show_rainbow
 
-bot = Robot()
+leds = Leds()
 
 while True:
     print("on")
-    show_rainbow(bot.leds, range(bot.leds.count))
-    bot.leds.show()
+    show_rainbow(leds, range(leds.count))
+    leds.show()
     sleep(0.5)
     print("off")
-    bot.leds.clear()
-    bot.leds.show()
+    leds.clear()
+    leds.show()
     sleep(0.5)
