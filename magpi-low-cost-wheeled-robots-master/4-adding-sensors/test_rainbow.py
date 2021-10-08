@@ -4,12 +4,14 @@ from led_rainbow import show_rainbow
 
 leds = Leds()
 
+offset=0
 while True:
-    print("on")
-    show_rainbow(leds, range(leds.count))
+#    print("on")
+    show_rainbow(offset, leds, range(leds.count))
+    offset += 1
     leds.show()
-    sleep(0.5)
-    print("off")
-    leds.clear()
-    leds.show()
-    sleep(0.5)
+    sleep(0.1)
+    #print("off")
+    #leds.clear()
+    #leds.show()
+    #sleep(0.5)
