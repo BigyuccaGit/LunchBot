@@ -20,11 +20,11 @@ class EncoderCounter(object):
         dir(self.device.pin)
  
     def when_changed(self, time_ticks, state):
-        #self.pulse_count += self.direction
         time_diff=time_ticks-self.last
         self.last=time_ticks
         if self.record :
             self.list.append(time_diff)
+            self.pulse_count += self.direction
 
     def set_direction(self, direction):
         self.direction = direction
@@ -40,13 +40,12 @@ rotorr.device.pin.edges='rising'
 print(rotorr.device.pin.edges)
 #quit()
 
-speed = 0.5
+speed = 1
 
 motorr.forward(speed)
 #motorl.forward(speed)
 
 sleep(0.1)
-
 
 
 #rotorl = EncoderCounter(8)
@@ -56,9 +55,9 @@ atexit.register(motorr.stop)
 sample=0
 
 start_time=time.time()
-stop_at_time=start_time+1
+stop_at_time=start_time+6
 true_start=start_time+0.5
-true_end=start_time+0.51
+true_end=start_time+5.5
 #while (sample <= 100):
 while time.time() < stop_at_time:
 
@@ -85,15 +84,18 @@ motorr.stop()
 #print("Summary", forward, backward, stopped)
 
 
-[print((x)) for x in rotorr.list]
+#[print((x)) for x in rotorr.list]
 
 sum=0
 for x in rotorr.list:
     sum+=x
+    
+print("sum", sum, rotorr.pulse_count)
 
-sum/=len(rotorr.list)
 
-rotorr.list
-print("Mean", sum)
+#sum/=len(rotorr.list)
+
+#rotorr.list
+#print("Mean", sum)
 
 quit()

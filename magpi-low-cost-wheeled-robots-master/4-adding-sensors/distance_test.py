@@ -29,10 +29,12 @@ while True:
     x=booleanized(rsensor,threshold_distance,1,hysteresis=hysteresis) 
     y=booleanized(lsensor,threshold_distance,1,hysteresis=hysteresis) 
  
-    dist=f'{rsensor.distance*100:.3f} cm'
-    print('Distance to nearest r object is '+ dist, next(x) )
-#    dist=f'{lsensor.distance*100:.3f} cm'
+    rdist=f'{rsensor.distance*100:.1f} cm'
+#    print('Distance to nearest r object is '+ dist, next(x) )
+    ldist=f'{lsensor.distance*100:.1f} cm'
 #    print('Distance to nearest l object is '+ dist, next(y) )
+    print('Distances to nearest l r object are '+ ldist, rdist )
+
 #    if rsensor.value < threshold_distance:
 #        ledr.on()
 #    else:

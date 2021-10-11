@@ -29,10 +29,10 @@ class Robot:
 
     def perform(self, operation, speed):
         if speed != 0:
-            print("Calling non stop", speed)
+  #          print("Calling non stop", speed)
             operation(abs(speed)/100.0)
         else:
-            print("Calling stop")
+  #          print("Calling stop")
             operation()
     
     def left_motor_speed(self, speed=100):
