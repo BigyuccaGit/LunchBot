@@ -2,6 +2,7 @@ import gpiozero
 import atexit
 from gpiozero.pins.pigpio import PiGPIOFactory
 from gpiozero import DistanceSensor, DistanceSensorNoEcho
+from gpiozero import LED, Buzzer
 
 class Robot:
     def __init__(self):
@@ -13,6 +14,9 @@ class Robot:
         factory = PiGPIOFactory()
         self.left_distance_sensor = DistanceSensor(echo=13, trigger=26, queue_len=2, pin_factory=factory)
         self.right_distance_sensor = DistanceSensor(echo=5, trigger=6, queue_len=2, pin_factory=factory)
+
+        self.buzzer = Buzzer(21)
+        self.led = LED(20)
 
         # ensure the motors get stopped when the code exits
         atexit.register(self.stop_all)
