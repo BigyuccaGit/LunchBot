@@ -71,7 +71,6 @@ while True:
 
   # Wait for object to come in range
   while not r_sensor.in_range and not l_sensor.in_range: 
-  
   #  print(r_sensor.in_range, r_sensor.distance*100, l_sensor.in_range, l_sensor.distance*100)
     sleep(0.01) 
 
