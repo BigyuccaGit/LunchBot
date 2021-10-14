@@ -52,26 +52,23 @@ class ObstacleAvoidance:
 
             # Wait for object to come in range
             while not self.r_sensor.in_range and not self.l_sensor.in_range: 
-  
                 #  print(r_sensor.in_range, r_sensor.distance*100, l_sensor.in_range, l_sensor.distance*100)
                 sleep(0.01) 
 
-                # Stop the robot
-                self.robot.stop()
-                print("STOP")
+            # Stop the robot
+            self.robot.stop()
+            print("STOP")
 
-                # Choose which spin option to do in a moment based on current settings
-                self.spin_option=choose_spin(self.r_sensor.in_range, self.l_sensor.in_range)
+            # Choose which spin option to do in a moment based on current settings
+            self.spin_option=choose_spin(self.r_sensor.in_range, self.l_sensor.in_range)
 
-                # Go Backwards
-                print("BACKWARD")
-                self.backwards()  
+            # Go Backwards
+            print("BACKWARD")
+            self.backwards()  
 
-                # Execute chosen spin option
-                print("SPIN")
-                self.spin_option()
-
-                
+            # Execute chosen spin option
+            print("SPIN")
+            self.spin_option()    
 
 bot=Robot()
 behaviour=ObstableAvoidance(bot)
