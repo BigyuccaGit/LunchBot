@@ -21,31 +21,24 @@ class ObstacleAvoidance:
     def right_spin(self):
         print("RIGHT SPIN")
         self.robot.speeds(100,-100)
-        #self.robot.right_motor.backward()
         sleep(1.0)
         self.robot.stop()
   
     def left_spin(self):
         print("LEFT SPIN")
         self.robot.speeds(-100,100)
-        #self.robot.right_motor.forward()
-        #self.robot.left_motor.backward()
         sleep(1.0)
         self.robot.stop()
   
-    coin_toss=[left_spin, right_spin]
     def random_spin(self):
-        self.coin_toss[random.randint(0,1)](self)
+        heads_or_tails = random.randint(0,1)
+        [self.left_spin, self.right_spin][heads_or_tails]()
 
-    spin_options=[random_spin, right_spin, left_spin, random_spin]
-    #                 failsafe,   left sensor, right sensor, both sensors
     def choose_spin(self, r_in_range, l_in_range):
         option = (r_in_range << 1) + l_in_range
-        #spin_option[option]()
         print(r_in_range, l_in_range, option)
-        return self.spin_options[option]
-  
-
+        return [self.random_spin, self.right_spin, self.left_spin, self.random_spin][option]
+#                 failsafe,         left sensor,     right sensor,     both sensors
     def run(self):
         while True:
               # Send robot forward
@@ -71,7 +64,7 @@ class ObstacleAvoidance:
 
             # Execute chosen spin option
             print("SPIN")
-            self.spin_option(self)    
+            self.spin_option()    
 
 bot=Robot()
 behaviour=ObstacleAvoidance(bot)
