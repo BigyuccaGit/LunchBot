@@ -1,14 +1,17 @@
 from robot import Robot, DistanceSensorNoEcho
+import atexit
+from time import sleep
+import random
 
 class ObstacleAvoidance:
 
     def __init__(self, the_robot):
         
         self.robot = the_robot
-        # Ensure it will stop
+        self.r_sensor = self.robot.right_distance_sensor
+        self.l_sensor = self.robot.left_distance_sensor
+       # Ensure it will stop
         atexit.register(self.robot.stop_all)
-        self.r_sensor.robot.right_distance_sensor
-        self.l_sensor.robot.left_distance_sensor
 
     def backwards(self):
         self.robot.backward()
@@ -24,23 +27,23 @@ class ObstacleAvoidance:
   
     def left_spin(self):
         print("LEFT SPIN")
-        rself.robot.speeds(-100,100)
+        self.robot.speeds(-100,100)
         #self.robot.right_motor.forward()
         #self.robot.left_motor.backward()
         sleep(1.0)
         self.robot.stop()
   
-    self.coin_toss=[self.left_spin, self.right_spin]
+    coin_toss=[left_spin, right_spin]
     def random_spin(self):
-        self.coin_toss[random.randint(0,1)]()
+        self.coin_toss[random.randint(0,1)](self)
 
-    self.spin_options=[self.random_spin, self.right_spin, self.left_spin, self.random_spin]
+    spin_options=[random_spin, right_spin, left_spin, random_spin]
     #                 failsafe,   left sensor, right sensor, both sensors
     def choose_spin(self, r_in_range, l_in_range):
         option = (r_in_range << 1) + l_in_range
         #spin_option[option]()
         print(r_in_range, l_in_range, option)
-        return spin_options[option]
+        return self.spin_options[option]
   
 
     def run(self):
@@ -48,7 +51,7 @@ class ObstacleAvoidance:
               # Send robot forward
             print("FORWARD")
             self.robot.forward()
-            print(r_sensor.in_range, r_sensor.distance*100, l_sensor.in_range, l_sensor.distance*100)
+            print(self.r_sensor.in_range, self.r_sensor.distance*100, self.l_sensor.in_range, self.l_sensor.distance*100)
 
             # Wait for object to come in range
             while not self.r_sensor.in_range and not self.l_sensor.in_range: 
@@ -60,7 +63,7 @@ class ObstacleAvoidance:
             print("STOP")
 
             # Choose which spin option to do in a moment based on current settings
-            self.spin_option=choose_spin(self.r_sensor.in_range, self.l_sensor.in_range)
+            self.spin_option=self.choose_spin(self.r_sensor.in_range, self.l_sensor.in_range)
 
             # Go Backwards
             print("BACKWARD")
@@ -68,8 +71,8 @@ class ObstacleAvoidance:
 
             # Execute chosen spin option
             print("SPIN")
-            self.spin_option()    
+            self.spin_option(self)    
 
 bot=Robot()
-behaviour=ObstableAvoidance(bot)
-begaviour.run()
+behaviour=ObstacleAvoidance(bot)
+behaviour.run()
