@@ -10,14 +10,18 @@ class ObstacleAvoidance:
         self.robot = the_robot
         self.r_sensor = self.robot.right_distance_sensor
         self.l_sensor = self.robot.left_distance_sensor
+        self.buzzer = self.robot.buzzer
+        
        # Ensure it will stop
         atexit.register(self.robot.stop_all)
 
     def backwards(self):
         self.robot.backward()
+        self.buzzer.beep(0.2,0.2)
         sleep(1.0)
         self.robot.stop()    
-  
+        self.buzzer.off()
+        
     def right_spin(self):
         print("RIGHT SPIN")
         self.robot.speeds(100,-100)
@@ -60,7 +64,7 @@ class ObstacleAvoidance:
 
             # Go Backwards
             print("BACKWARD")
-            self.backwards()  
+            self.backwards()
 
             # Execute chosen spin option
             print("SPIN")
