@@ -65,6 +65,8 @@ class Robot:
 
     def stop_all(self):
         self.stop()
+        self.buzzer.off()
+        self.led.off()
 
         # add any more h/ww stops here
   
