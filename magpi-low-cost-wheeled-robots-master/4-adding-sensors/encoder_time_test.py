@@ -1,35 +1,13 @@
 from gpiozero import Motor
 from time import sleep
 import atexit
-from gpiozero import DigitalInputDevice
+#from gpiozero import DigitalInputDevice
+
+from encoder_counter import EncoderCounter
 import time
 import logging
 
 logger = logging.getLogger("test_encoders")
-
-class EncoderCounter(object):
-    def __init__(self, pin_number):
-        self.pulse_count = 0
-        self.device = DigitalInputDevice(pin=pin_number)
-        self.device.pin.when_changed = self.when_changed
-        self.direction = 1
-        self.last=0
-        self.pulse_last=0
-        self.record=False
-        self.list=[]
-        dir(self.device.pin)
- 
-    def when_changed(self, time_ticks, state):
-        time_diff=time_ticks-self.last
-        self.last=time_ticks
-        if self.record :
-            self.list.append(time_diff)
-            self.pulse_count += self.direction
-
-    def set_direction(self, direction):
-        self.direction = direction
-
-
 
 motorr = Motor(forward=27, backward=17)
 #motorl = Motor(forward=23, backward=24)
@@ -55,26 +33,27 @@ atexit.register(motorr.stop)
 sample=0
 
 start_time=time.time()
-stop_at_time=start_time+6
+stop_at_time=start_time+20
 true_start=start_time+0.5
 true_end=start_time+5.5
 #while (sample <= 100):
 while time.time() < stop_at_time:
 
     #if sample == 50:
-    now=time.time()
-    rotorr.record=now >= true_start and now < true_end
+#    now=time.time()
+#   rotorr.record=now >= true_start and now < true_end
 #        rotorr.record=True
 
 #    if sample == 51:
 #        rotorr.record=False
 
 #    print("Steps = ", rotor.steps, rotor.value, sample)
-    thisr = rotorr.pulse_count
+#    rotorr.pulse_count
 
    # print("Steps = ", thisr, thisl, thisr-last, status, sample)
-    sample = sample+1
-    sleep(0.01)
+ #   sample = sample+1
+     print(time.time(), rotorr.pulse_count, rotorr.pulse_delta)
+     sleep(0.1)
 
 
 motorr.stop()
@@ -86,11 +65,11 @@ motorr.stop()
 
 #[print((x)) for x in rotorr.list]
 
-sum=0
-for x in rotorr.list:
-    sum+=x
+#sum=0
+#for x in rotorr.list:
+#    sum+=x
     
-print("sum", sum, rotorr.pulse_count)
+#print("sum", sum, rotorr.pulse_count)
 
 
 #sum/=len(rotorr.list)
@@ -98,4 +77,4 @@ print("sum", sum, rotorr.pulse_count)
 #rotorr.list
 #print("Mean", sum)
 
-quit()
+#quit()
