@@ -14,8 +14,9 @@ class EncoderCounter():
         self.id = id
         
         self.device.pin.when_changed = self.when_changed
-        self.t = BackgroundTask(self.calc_delta, 0.5, self.id)
-        self.t.start()
+        self.thread = BackgroundTask(self.calc_delta, 0.5, self.id)
+        #print("Daemon = ", self.thread.daemon)
+        self.thread.start()
         
     def calc_delta(self):
         self.pulse_delta = self.pulse_count - self.pulse_last

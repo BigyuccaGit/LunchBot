@@ -4,7 +4,7 @@ import threading
 class BackgroundTask(threading.Thread):
 
     def __init__(self, func, interval, id, daemon=True, *args, **kwargs):
-        super().__init__(*args,**kwargs)
+        super().__init__(daemon=daemon,*args,**kwargs)
         self.func = func
         self.interval = interval
         self.id = id
