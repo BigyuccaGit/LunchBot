@@ -43,6 +43,5 @@ while time.time() < stop_at_time:
      print(time.time(), rotorl.pulse_delta, rotorr.pulse_delta)
      sleep(0.1)
 
+exit_all()
 
-motorr.stop()
-motorl.stop()

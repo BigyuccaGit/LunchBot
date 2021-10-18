@@ -3,15 +3,16 @@ import threading
 
 class BackgroundTask(threading.Thread):
 
-    def __init__(self, func, id, daemon=True, *args, **kwargs):
+    def __init__(self, func, interval, id, daemon=True, *args, **kwargs):
         super().__init__(*args,**kwargs)
         self.func = func
+        self.interval = interval
         self.id = id
             
     def run(self,*args,**kwargs):
         self.t=time.time()
         while True:
-            self.t += 0.1
+            self.t += self.interval
             self.func()
             interval=max(self.t-time.time(),0)
            # print(self.id, interval)
