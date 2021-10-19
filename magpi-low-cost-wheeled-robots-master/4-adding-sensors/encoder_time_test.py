@@ -10,6 +10,7 @@ import logging
 def exit_all():
   motorr.stop()
   motorl.stop()
+  sleep(1.0)
      
 
 logger = logging.getLogger("test_encoders")
@@ -35,7 +36,7 @@ sleep(0.1)
 sample=0
 
 start_time=time.time()
-stop_at_time=start_time+20
+stop_at_time=start_time+5
 
 while time.time() < stop_at_time:
 #     print(time.time(), rotorl.pulse_count, rotorl.pulse_last, rotorl.pulse_delta, rotorr.pulse_count, rotorr.pulse_last, rotorr.pulse_delta)
