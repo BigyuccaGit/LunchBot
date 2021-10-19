@@ -3,6 +3,7 @@ import atexit
 from gpiozero.pins.pigpio import PiGPIOFactory
 from gpiozero import DistanceSensor, DistanceSensorNoEcho
 from gpiozero import LED, Buzzer
+import leds_led_shim
 
 class Robot:
     def __init__(self):
@@ -12,13 +13,21 @@ class Robot:
         # Setup The Distance Sensors
 
         factory = PiGPIOFactory()
-        self.left_distance_sensor = DistanceSensor(echo=13, trigger=26, queue_len=2, pin_factory=factory)
-        self.right_distance_sensor = DistanceSensor(echo=5, trigger=6, queue_len=2, pin_factory=factory)
+        self.left_distance_sensor = DistanceSensor(echo=13, trigger=26, queue_len=2,
+                                                   pin_factory=factory)
+        self.right_distance_sensor = DistanceSensor(echo=5, trigger=6, queue_len=2,
+                                                    pin_factory=factory)
 
+        # Set up the Buzzer
         self.buzzer = Buzzer(21)
+
+        # Set up the LED
         self.led = LED(20)
 
-        # ensure the motors get stopped when the code exits
+        # Set up the LED SHIM
+        self.leds = leds_led_shim.Leds();
+
+        # Ensure the motors get stopped when the code exits
         atexit.register(self.stop_all)
 
     def get_operation(self, motor, speed):
@@ -67,6 +76,8 @@ class Robot:
         self.stop()
         self.buzzer.off()
         self.led.off()
+        self.leds.clear()
+        self.leds.show()
 
         # add any more h/ww stops here
   

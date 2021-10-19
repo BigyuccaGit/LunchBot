@@ -1,5 +1,8 @@
 import ledshim
 
+# Controlling class for the LED SHIM
+
+# It is an I2C device
 
 class Leds: 
     @property
