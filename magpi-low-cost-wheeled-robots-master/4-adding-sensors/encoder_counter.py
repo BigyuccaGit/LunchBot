@@ -26,13 +26,13 @@ class EncoderCounter():
         self.device.pin.when_changed = self.when_changed
 
         # Set up and start background daemon thread that calculates delta pulse count every 'interval' seconds
-        self.thread = BackgroundTask(self.calc_delta, interval, self.id)
+        self.thread = BackgroundTask(self.background_calc_pulse_delta, interval, self.id)
         self.thread.start()
         #print("Daemon = ", self.thread.daemon)
  
     # Define method to run in background thread.
     # Calculates delta encoder pulse count as proxy for speed
-    def calc_delta(self):
+    def backgound_calc_pulse_delta(self):
 
         # Calculate one delta pulse count
         pc = self.pulse_count
