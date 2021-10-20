@@ -4,7 +4,7 @@ from background_task import BackgroundTask
 
 class EncoderCounter():
               
-    def __init__(self, pin_number, id, interval=0.5, buffer_delta_size=3, buffer_delta2_size=3):
+    def __init__(self, pin_number, id, interval=0.1, buffer_delta_size=5, buffer_delta2_size=5):
         # Initiate encoder and only trigger on rising edge
         self.device = DigitalInputDevice(pin=pin_number)
         self.device.pin.edges='rising'
@@ -15,10 +15,13 @@ class EncoderCounter():
         self.pulse_last = 0
         self.pulse_delta = 0
         self.pulse_delta_last = 0
+        self.pulse_delta2=0
 
         # Set up smoothing buffers
+        self.buffer_delta_size = buffer_delta_size
         self.buffer_delta_index = 0
         self.buffer_delta = buffer_delta_size * [0]
+        self.buffer_delta2_size = buffer_delta2_size
         self.buffer_delta2_index = 0
         self.buffer_delta2 = buffer_delta2_size * [0]
 
@@ -35,19 +38,20 @@ class EncoderCounter():
  
     # Define method to run in background thread.
     # Calculates delta and delta2 encoder pulse counts as proxy for speed and acceleration
-    def backgound_calc_pulse_delta(self):
+    def background_calc_pulse_delta(self):
 
         # Calculate one delta pulse count
         pc = self.pulse_count
         self.pulse_delta = pc - self.pulse_last
-  
+        self.pulse_delta2 = self.pulse_delta-self.pulse_delta_last
+        
         # Store delta pulse count in smoothing delta buffer and move rotating index
         self.buffer_delta[self.buffer_delta_index] = self.pulse_delta
         self.buffer_delta_index = (self.buffer_delta_index + 1) % self.buffer_delta_size
        #      print(self.id, self.pulse_delta, self.pulse_count, self.pulse_last)
       
         # Store delta2 pulse count in smoothing delta2 buffer and move rotating index
-        self.buffer_delta2[self.buffer_delta2_index] = self.pulse_delta-self.pulse_delta_last
+        self.buffer_delta2[self.buffer_delta2_index] = self.pulse_delta2
         self.buffer_delta2_index = (self.buffer_delta2_index + 1) % self.buffer_delta2_size
 
         # Remember values for next call
