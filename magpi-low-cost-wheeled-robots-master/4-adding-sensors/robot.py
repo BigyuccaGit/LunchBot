@@ -21,8 +21,9 @@ class Robot:
         # Set up the Buzzer
         self.buzzer = Buzzer(21)
 
-        # Set up the LED
-        self.led = LED(20)
+        # Set up the LEDs
+        self.left_led = LED(20)
+        self.right_led = LED(14)
 
         # Set up the LED SHIM
         self.leds = leds_led_shim.Leds();
@@ -75,7 +76,8 @@ class Robot:
     def stop_all(self):
         self.stop()
         self.buzzer.off()
-        self.led.off()
+        self.right_led.off()
+        self.left_led.off()
         self.leds.clear()
         self.leds.show()
 
