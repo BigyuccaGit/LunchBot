@@ -36,7 +36,6 @@ def frame_generator():
 # Setup route for loopable stream of HTTP frames from frame_generator
 @app.route('/display')
 def display():
-
     # Specify content type with boundary between items (string of characters frame)
     return Response(frame_generator(),
         mimetype='multipart/x-mixed-replace; boundary=frame')
