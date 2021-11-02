@@ -1,0 +1,12 @@
+<html>
+  <!-- Header -->
+  <head>
+        <title>Robot Image Server</title>
+    </head>
+    <body>
+      <h1>Robot Image Server</h1>
+        <!-- Image link to display output of server -->
+        <!-- Jinja insert URL for route /display using the function name -->
+        <img src="{{ url_for('display') }}">
+    </body>
+</html>
