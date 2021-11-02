@@ -1,0 +1,17 @@
+<html>
+  <!-- Header -->
+  <head>
+    <!-- Load the jQuery library -->
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <title>Robot Image Server</title>
+    </head>
+    <body>
+        <h1>Robot Image Server</h1>
+        <!-- Image link to display output of server -->
+        <!-- Jinja insert URL for route /display using the function name -->
+        <img src="{{ url_for('display') }}"><br>
+	<!-- Post exit command to /control route in web app. 
+	     Above <br> creates a line break to show exit link below image -->
+        <a href="#" onclick="$.post('/control', {'command': 'exit'});">Exit</a>
+    </body>
+</html>
