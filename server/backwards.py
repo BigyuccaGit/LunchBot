@@ -1,6 +1,6 @@
 import gpiozero
 import time
-import sys
+#import sys
 from pins import *
 
 speed=1
