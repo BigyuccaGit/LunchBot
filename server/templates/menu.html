@@ -1,0 +1,40 @@
+<html>
+  <head>
+    <!-- Get jQuery -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <title>Robot Menu</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="/static/display.css">
+  </head>
+  
+<body>
+  <h1>Robot Menu</h1>
+    <!-- Space for message -->
+    <p id="message"></p>
+    <ul class="menu">
+      <!-- Create the menu -->
+      {% for item in menu %}
+        <li>
+            <a class="button" href="#" onclick="run('/run/{{ item.mode_name }}')">
+                {{ item.text }}
+            </a>
+        </li>
+	{% endfor %}
+	<!-- Add the stop option to the menu -->
+    <li><a class="button" href="#" onclick="run('/stop')">Stop</a></li>
+  </ul>
+</body>
+
+<!-- Make POST requests to server and update message with the response --> 
+<script>
+    function run(url) {
+	$.post(url, '', response => {
+          $('#message').html(response.message);
+          if(response.redirect) {
+              setTimeout(() => window.location.replace('//' + window.location.hostname + ":5001"), 3000);
+          }
+      })
+    }
+</script>
+
+</html>
