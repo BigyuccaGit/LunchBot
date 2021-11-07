@@ -1,23 +1,20 @@
 from flask import Flask, render_template, jsonify
 from robot_modes import RobotModes
 
-# A Flask App contains all its routes.
+# A Flask App containing all its routes.
 app = Flask(__name__)
 
 # Prepare our robot modes for use
 mode_manager = RobotModes()
-
 
 @app.after_request
 def add_header(response):
     response.headers['Cache-Control'] = "no-cache, no-store, must-revalidate"
     return response
 
-
 @app.route("/")
 def index():
     return render_template('menu.html', menu=mode_manager.menu_config)
-
 
 @app.route("/run/<mode_name>", methods=['POST'])
 def run(mode_name):
@@ -28,7 +25,6 @@ def run(mode_name):
         response['redirect'] = True
     return jsonify(response)
 
-
 @app.route("/stop", methods=['POST'])
 def stop():
     # Tell our system to stop the mode it's in.
@@ -36,4 +32,4 @@ def stop():
     return jsonify({'message': "Stopped"})
 
 # Start the server
-app.run(host="0.0.0.0", debug=True)
+app.run(host="0.0.0.0")

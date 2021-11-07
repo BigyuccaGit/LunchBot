@@ -14,12 +14,12 @@ class RobotModes(object):
 #        "line_following": "line_follow_behavior.py",
 #        "color_track": "color_track_behavior.py",
 #        "face_track": "face_track_behavior.py",
-    }
+#    }
     mode_config = {
-        "buzzer": "buzzer.py",
-        "left_led": "left_led.py",
-        "right_led": "right_led.py",
-        "backwards": "backwards.py",
+        "buzzer":   {"script": "buzzer.py", "server": False},
+        "left_led": {"script": "left_led.py", "server": False},
+        "right_led": {"script": "right_led.py", "server": False},
+        "backwards": {"script": "backwards.py","server": False}
 #        "test_rainbow": "test_rainbow.py",
 #        "straight_line": "straight_line_drive.py",
 #        "square": "drive_square.py",
