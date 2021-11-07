@@ -4,17 +4,7 @@ class RobotModes(object):
     """Our robot behaviors and tests as running modes"""
 
     # Mode config goes from a "mode_name" to a script to run. Configured for look up.
-#    mode_config = {
-#        "avoid_behavior": "avoid_with_rainbows.py",
-#        "circle_head": "circle_pan_tilt_behavior.py",
-#        "test_leds": "leds_test.py",
-#        "test_rainbow": "test_rainbow.py",
-#        "straight_line": "straight_line_drive.py",
-#        "square": "drive_square.py",
-#        "line_following": "line_follow_behavior.py",
-#        "color_track": "color_track_behavior.py",
-#        "face_track": "face_track_behavior.py",
-#    }
+
     mode_config = {
         "buzzer":   {"script": "buzzer.py", "server": False},
         "left_led": {"script": "left_led.py", "server": False},
@@ -28,18 +18,7 @@ class RobotModes(object):
 #        "face_track": "face_track_behavior.py",
     }
 
-#    menu_config = [
-#        {"mode_name": "avoid_behavior", "text": "Avoid Behavior"},
-#        {"mode_name": "circle_head", "text": "Circle Head"},
-#        {"mode_name": "test_rainbow", "text": "LED Rainbow"},
-#        {"mode_name": "test_leds", "text": "Test LEDs"},
-#        {"mode_name": "line_following", "text": "Line Following"},
-#        {"mode_name": "color_track", "text": "Color Tracking"},
-#        {"mode_name": "face_track", "text": "Face Tracking"},
-#        {"mode_name": "manual_drive", "text": "Drive Manually"},
-#        {"mode_name": "behavior_line", "text": "Drive In A Line"},
-#        {"mode_name": "drive_north", "text": "Drive North"}
-#    ]
+
     menu_config = [
         {"mode_name": "buzzer", "text": "Sound Buzzer"},
         {"mode_name": "left_led", "text": "Left LED"},
