@@ -25,11 +25,12 @@
   </ul>
 </body>
 
-<!-- Make POST requests to server and update message with the response --> 
+<!-- Make POST requests to server and update "message" with the response --> 
 <script>
     function run(url) {
 	$.post(url, '', response => {
-          $('#message').html(response.message);
+            $('#message').html(response.message);
+	    <!-- Redirect after 3 second delay ->
           if(response.redirect) {
               setTimeout(() => window.location.replace('//' + window.location.hostname + ":5001"), 3000);
           }
