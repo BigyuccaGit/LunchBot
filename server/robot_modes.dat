@@ -1,0 +1,5 @@
+# Mode Name, Description,  Script,		Redirect
+buzzer, Sound Buzzer, buzzer.py, False
+left_led, Left Led, left_led.py, False
+right_led, Right Led, right_led.py, False
+backwards, Backwards, backwards.py, False
