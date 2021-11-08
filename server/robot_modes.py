@@ -1,40 +1,31 @@
 import subprocess
+import csv
 
 class RobotModes(object):
     """Our robot behaviors and tests as running modes"""
-
-    # Mode config goes from a "mode_name" to a script to run. Configured for look up.
-
-    mode_config = {
-        "buzzer":   {"script": "buzzer.py", "server": False},
-        "left_led": {"script": "left_led.py", "server": False},
-        "right_led": {"script": "right_led.py", "server": False},
-        "backwards": {"script": "backwards.py","server": False}
-#        "test_rainbow": "test_rainbow.py",
-#        "straight_line": "straight_line_drive.py",
-#        "square": "drive_square.py",
-#        "line_following": "line_follow_behavior.py",
-#        "color_track": "color_track_behavior.py",
-#        "face_track": "face_track_behavior.py",
-    }
-
-
-    menu_config = [
-        {"mode_name": "buzzer", "text": "Sound Buzzer"},
-        {"mode_name": "left_led", "text": "Left LED"},
-        {"mode_name": "right_led", "text": "Right LED"},
-        {"mode_name": "backwards", "text": "Backwards"},
-#        {"mode_name": "line_following", "text": "Line Following"},
-#       {"mode_name": "color_track", "text": "Color Tracking"},
-#        {"mode_name": "face_track", "text": "Face Tracking"},
-#        {"mode_name": "manual_drive", "text": "Drive Manually"},
-#        {"mode_name": "behavior_line", "text": "Drive In A Line"},
-#        {"mode_name": "drive_north", "text": "Drive North"}
-   ]
-
-    # Set up the current process
+ 
+    # Set up the current process and load menu information from csv format file
     def __init__(self):
         self.current_process = None
+
+        self.mode_config = {}
+        self.menu_config = []
+        filename="robot_modes.dat"
+        with open(filename) as file:
+            reader=csv.reader(file)
+            line = 0;
+            for row in reader:
+                if line > 0:        
+                    server=row[3].strip() == "True"
+                    script = row[2].lstrip().rstrip()
+                    subdict = {"script": script, "server": server}
+                    self.mode_config[row[0]] = subdict
+
+                    mode_name = row[0].lstrip().rstrip()
+                    text = row[1].lstrip().rstrip()
+                    subdict = {"mode_name": mode_name, "text" : text}
+                    self.menu_config.append(subdict)
+                line = line + 1
 
     # Check if there is a process running. 
     def is_running(self):
@@ -61,3 +52,5 @@ class RobotModes(object):
     # Should we redirect?
     def should_redirect(self, mode_name):
         return self.mode_config[mode_name].get('server') is True and self.is_running()
+
+
