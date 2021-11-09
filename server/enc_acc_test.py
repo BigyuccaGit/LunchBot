@@ -17,11 +17,12 @@ import math
 def exit_all():
   motorr.stop()
   motorl.stop()
-  sleep(1.0)
+
   
 file_handler = logging.FileHandler(filename='test_encoder.log',mode='w')
 stdout_handler = logging.StreamHandler(sys.stdout)
-handlers = [file_handler, stdout_handler]
+#handlers = [file_handler, stdout_handler]
+handlers = [file_handler]
 
 logging.basicConfig(level=logging.INFO, handlers=handlers, format='%(message)s')
 
@@ -69,8 +70,10 @@ motorl.forward(speed)
 sleep(0.1)
 
 t=time.time()
+dt= 0.01
+acc_threshold = 3.0
 while time.time() < stop_at_time:
-     t = t + 0.1
+     t = t + dt
 #     print(time.time(), rotorl.pulse_count, rotorl.pulse_last, rotorl.pulse_delta, rotorr.pulse_count, rotorr.pulse_last, rotorr.pulse_delta)
 #     print(time.time(), rotorr.pulse_count, rotorr.pulse_delta)
      elapsed = time.time()-start_time
@@ -79,11 +82,22 @@ while time.time() < stop_at_time:
      amag=math.sqrt(ax*ax + ay*ay + az*az)
 
      logger.info(f"{elapsed:.2f} {rotorl.pulse_delta:10d} {rotorl.pulse_delta2:4d} {rotorl.smoothed_pulse_delta:6d} {rotorl.smoothed_pulse_delta2:4d} {lsensor.distance*100:6.1f} {rotorr.pulse_delta:10d} {rotorl.pulse_delta2:4d} {rotorr.smoothed_pulse_delta:6d} {rotorr.smoothed_pulse_delta2:4d} {rsensor.distance*100:6.1f}    {amag:5.2f} {ax:5.2f} {ay:5.2f} {az:5.2f} ")
-           
+
+     if amag > acc_threshold:
+       break
+       
  #    vp.rate(10)
  #    temp.graph.plot(elapsed, smoothed_pulse_delta)
   #   sleep(0.2)
      sleep(max(0,t - time.time()))
+     
+motorr.backward(speed)
+motorl.backward(speed)
+
+sleep(3.0)
+
+
 
 exit_all()
+
 
