@@ -10,6 +10,7 @@ import time
 import logging
 import sys
 from pins import *
+import math
 
 #import vpython as vp
 
@@ -31,7 +32,7 @@ logger = logging.getLogger("test_encoder")
 motorl = Motor(forward=L_MOTOR_F_PIN, backward=L_MOTOR_B_PIN)
 motorr = Motor(forward=R_MOTOR_F_PIN, backward=R_MOTOR_B_PIN)
 
-rotorl = EncoderCounter(R_ENCODER_PI,'L')
+rotorl = EncoderCounter(R_ENCODER_PIN,'L')
 rotorr = EncoderCounter(L_ENCODER_PIN,'R')
 
 factory = PiGPIOFactory()
@@ -75,9 +76,9 @@ while time.time() < stop_at_time:
      elapsed = time.time()-start_time
 
      ax, ay, az, gx, gy, gz = imu.read_accelerometer_gyro_data()
-     amag=sqrt(ax*ax + ay*ay + az*az)
+     amag=math.sqrt(ax*ax + ay*ay + az*az)
 
-     logger.info(f"{elapsed:.2f} {rotorl.pulse_delta:10d} {rotorl.pulse_delta2:4d} {rotorl.smoothed_pulse_delta:6d} {rotorl.smoothed_pulse_delta2:4d} {lsensor.distance*100:6.1f} {rotorr.pulse_delta:10d} {rotorl.pulse_delta2:4d} {rotorr.smoothed_pulse_delta:6d} {rotorr.smoothed_pulse_delta2:4d} {rsensor.distance*100:6.1f}    {amag:5.2f} {ax:5.2f} {ay:5.2f} {az:5.2f} }")
+     logger.info(f"{elapsed:.2f} {rotorl.pulse_delta:10d} {rotorl.pulse_delta2:4d} {rotorl.smoothed_pulse_delta:6d} {rotorl.smoothed_pulse_delta2:4d} {lsensor.distance*100:6.1f} {rotorr.pulse_delta:10d} {rotorl.pulse_delta2:4d} {rotorr.smoothed_pulse_delta:6d} {rotorr.smoothed_pulse_delta2:4d} {rsensor.distance*100:6.1f}    {amag:5.2f} {ax:5.2f} {ay:5.2f} {az:5.2f} ")
            
  #    vp.rate(10)
  #    temp.graph.plot(elapsed, smoothed_pulse_delta)
