@@ -9,8 +9,8 @@ def make_robot():
     wheel_thickness = 16#26
     wheel_diameter = 80#70
     axle_x = -126#30             # wheel axle from
-    axle_z = -20
-    castor_position = vp.vector(115,0,-30)#vp.vector(-80, -6, -30)
+    axle_z = 15
+    castor_position = vp.vector(115,0,0)#vp.vector(-80, -6, -30)
     castor_radius = 14
     castor_thickness = 12
 

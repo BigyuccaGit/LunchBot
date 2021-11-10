@@ -5,8 +5,8 @@ import imu_settings
 import virtual_robot
 
 
-#imu = RobotImu(gyro_offsets=imu_settings.gyro_offsets)
-imu = RobotImu()
+imu = RobotImu(gyro_offsets=imu_settings.gyro_offsets)
+#imu = RobotImu()
 
 pitch = 0
 roll = 0
