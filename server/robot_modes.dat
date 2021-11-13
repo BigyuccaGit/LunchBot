@@ -1,5 +1,6 @@
 # Mode Name, Description,  Script,		Redirect
-enc_acc_test,Encoder/Accelerometer Test, enc_acc_test.py,False
+drive_north, Drive North, drive_north_behavior.py, False
+enc_acc_test, Encoder/Accelerometer Test, enc_acc_test.py, False
 buzzer, Sound Buzzer, buzzer.py, False
 left_led, Left Led, left_led.py, False
 right_led, Right Led, right_led.py, False
