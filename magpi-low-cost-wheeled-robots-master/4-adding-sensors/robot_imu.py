@@ -69,7 +69,7 @@ class RobotImu:
         """Return magnetometer data"""
         mag_x, mag_y, mag_z = self._imu.read_magnetometer_data()
 #        return vector(mag_x, -mag_y, -mag_z)
-        return vector(mag_x, mag_y, mag_z)
+        return vector(mag_x, mag_y, mag_z) - self.mag_offsets
 
 
 class ImuFusion:
