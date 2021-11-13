@@ -44,7 +44,7 @@ class Robot:
     def perform(self, operation, speed):
         if speed != 0:
   #          print("Calling non stop", speed)
-            operation(abs(speed)/100.0)
+            operation(min(abs(speed)/100.0,1.0))
         else:
   #          print("Calling stop")
             operation()
@@ -52,11 +52,15 @@ class Robot:
     def left_motor_speed(self, speed=100):
         operation = self.get_operation(self.left_motor, speed)
         self.perform(operation, speed)
-        
+
+    set_left=left_motor_speed
+    
     def right_motor_speed(self, speed=100):
         operation = self.get_operation(self.right_motor, speed)
         self.perform(operation, speed)
 
+    set_right=right_motor_speed
+    
     def speeds(self, left_speed=100, right_speed=100):
         self.left_motor_speed(left_speed)
         self.right_motor_speed(right_speed)
