@@ -4,33 +4,26 @@ from gpiozero.pins.pigpio import PiGPIOFactory
 from gpiozero import DistanceSensor, DistanceSensorNoEcho
 from gpiozero import LED, Buzzer
 import leds_led_shim
-from pins import *
 
 class Robot:
     def __init__(self):
-        self.right_motor = gpiozero.Motor(forward=R_MOTOR_F_PIN, \
-                                          backward=R_MOTOR_B_PIN)
-        self.left_motor=   gpiozero.Motor(forward=L_MOTOR_F_PIN, \
-                                          backward=L_MOTOR_B_PIN)
+        self.right_motor = gpiozero.Motor(forward=27, backward=17)
+        self.left_motor= gpiozero.Motor(forward=24, backward=23)
 
         # Setup The Distance Sensors
 
         factory = PiGPIOFactory()
-        self.left_distance_sensor = DistanceSensor(echo=L_SENSOR_ECHO_PIN, \
-                                                   trigger=L_SENSOR_TRIGGER_PIN, \
-                                                   queue_len=2,\
+        self.left_distance_sensor = DistanceSensor(echo=13, trigger=26, queue_len=2,
                                                    pin_factory=factory)
-        self.right_distance_sensor = DistanceSensor(echo=R_SENSOR_ECHO_PIN, \
-                                                    trigger=R_SENSOR_TRIGGER_PIN, \
-                                                    queue_len=2, \
+        self.right_distance_sensor = DistanceSensor(echo=5, trigger=6, queue_len=2,
                                                     pin_factory=factory)
 
         # Set up the Buzzer
-        self.buzzer = Buzzer(BUZZER_PIN)
+        self.buzzer = Buzzer(21)
 
         # Set up the LEDs
-        self.left_led = LED(L_LED_PIN)
-        self.right_led = LED(R_LED_PIN)
+        self.left_led = LED(20)
+        self.right_led = LED(14)
 
         # Set up the LED SHIM
         self.leds = leds_led_shim.Leds();
@@ -51,7 +44,7 @@ class Robot:
     def perform(self, operation, speed):
         if speed != 0:
   #          print("Calling non stop", speed)
-            operation(abs(speed)/100.0)
+            operation(min(abs(speed)/100.0,1.0))
         else:
   #          print("Calling stop")
             operation()
@@ -59,11 +52,15 @@ class Robot:
     def left_motor_speed(self, speed=100):
         operation = self.get_operation(self.left_motor, speed)
         self.perform(operation, speed)
-        
+
+    set_left=left_motor_speed
+    
     def right_motor_speed(self, speed=100):
         operation = self.get_operation(self.right_motor, speed)
         self.perform(operation, speed)
 
+    set_right=right_motor_speed
+    
     def speeds(self, left_speed=100, right_speed=100):
         self.left_motor_speed(left_speed)
         self.right_motor_speed(right_speed)
