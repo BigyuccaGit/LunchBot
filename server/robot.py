@@ -4,7 +4,7 @@ from gpiozero.pins.pigpio import PiGPIOFactory
 from gpiozero import DistanceSensor, DistanceSensorNoEcho
 from gpiozero import LED, Buzzer
 import leds_led_shim
-import encoder_counter
+from encoder_counter import EncoderCounter
 from pins import *
 
 class Robot:
@@ -27,15 +27,15 @@ class Robot:
                                                     pin_factory=factory)
 
         # Setup the encoders
-        self.left_encoder = EncoderCounter(L_ENCODER_PIN)
-        self.right_encoder = EncoderCounter(R_ENCODER_PIN)
+        self.left_encoder = EncoderCounter(L_ENCODER_PIN, "L")
+        self.right_encoder = EncoderCounter(R_ENCODER_PIN, "R")
 
         # Set up the Buzzer
         self.buzzer = Buzzer(BUZZER_PIN )
 
         # Set up the LEDs
-        self.left_led = LED(L_LED_PIN, "L")
-        self.right_led = LED(R_LED_PIN, "R")
+        self.left_led = LED(L_LED_PIN)
+        self.right_led = LED(R_LED_PIN)
 
         # Set up the LED SHIM
         self.leds = leds_led_shim.Leds();
