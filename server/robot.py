@@ -4,26 +4,38 @@ from gpiozero.pins.pigpio import PiGPIOFactory
 from gpiozero import DistanceSensor, DistanceSensorNoEcho
 from gpiozero import LED, Buzzer
 import leds_led_shim
+import encoder_counter
+from pins import *
 
 class Robot:
     def __init__(self):
-        self.right_motor = gpiozero.Motor(forward=27, backward=17)
-        self.left_motor= gpiozero.Motor(forward=24, backward=23)
 
-        # Setup The Distance Sensors
+        # Setup the motors
+        self.left_motor= gpiozero.Motor(forward=L_MOTOR_F_PIN, backward=L_MOTOR_B_PIN)
+        self.right_motor = gpiozero.Motor(forward=R_MOTOR_F_PIN, backward=R_MOTOR_B_PIN)
 
+        # Setup the Distance Sensors
         factory = PiGPIOFactory()
-        self.left_distance_sensor = DistanceSensor(echo=13, trigger=26, queue_len=2,
+        self.left_distance_sensor = DistanceSensor(\
+                                                   echo=L_SENSOR_ECHO_PIN ,\
+                                                   trigger=L_SENSOR_TRIGGER_PIN ,\
+                                                   queue_len=2, \
                                                    pin_factory=factory)
-        self.right_distance_sensor = DistanceSensor(echo=5, trigger=6, queue_len=2,
+        self.right_distance_sensor = DistanceSensor(echo=R_SENSOR_ECHO_PIN,\
+                                                    trigger=R_SENSOR_TRIGGER_PIN,\
+                                                    queue_len=2,
                                                     pin_factory=factory)
 
+        # Setup the encoders
+        self.left_encoder = EncoderCounter(L_ENCODER_PIN)
+        self.right_encoder = EncoderCounter(R_ENCODER_PIN)
+
         # Set up the Buzzer
-        self.buzzer = Buzzer(21)
+        self.buzzer = Buzzer(BUZZER_PIN )
 
         # Set up the LEDs
-        self.left_led = LED(20)
-        self.right_led = LED(14)
+        self.left_led = LED(L_LED_PIN, "L")
+        self.right_led = LED(R_LED_PIN, "R")
 
         # Set up the LED SHIM
         self.leds = leds_led_shim.Leds();
