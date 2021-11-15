@@ -9,6 +9,8 @@ class EncoderCounter():
         self.device = DigitalInputDevice(pin=pin_number)
         self.device.pin.edges='rising'
         # Note: spec says 1920 rising pulses per single turn
+        self.ticks_per_revolution = 1920
+        self.wheel_diameter_mm = 80
 
         # Some starting values
         self.pulse_count = 0
