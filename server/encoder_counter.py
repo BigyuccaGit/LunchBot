@@ -8,6 +8,7 @@ class EncoderCounter():
         # Initiate encoder and only trigger on rising edge
         self.device = DigitalInputDevice(pin=pin_number)
         self.device.pin.edges='rising'
+        # Note: spec says 1920 rising pulses per single turn
 
         # Some starting values
         self.pulse_count = 0
