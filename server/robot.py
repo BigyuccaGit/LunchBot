@@ -8,28 +8,36 @@ from encoder_counter import EncoderCounter
 from pins import *
 
 class Robot:
-    def __init__(self):
+    def __init__(self, distance = True, encoder = True):
 
         # Setup the motors
         self.left_motor= gpiozero.Motor(forward=L_MOTOR_F_PIN, backward=L_MOTOR_B_PIN)
         self.right_motor = gpiozero.Motor(forward=R_MOTOR_F_PIN, backward=R_MOTOR_B_PIN)
 
         # Setup the Distance Sensors
-        factory = PiGPIOFactory()
-        self.left_distance_sensor = DistanceSensor(\
+        if distance :
+            factory = PiGPIOFactory()
+            self.left_distance_sensor = DistanceSensor(\
                                                    echo=L_SENSOR_ECHO_PIN ,\
                                                    trigger=L_SENSOR_TRIGGER_PIN ,\
                                                    queue_len=2, \
                                                    pin_factory=factory)
-        self.right_distance_sensor = DistanceSensor(echo=R_SENSOR_ECHO_PIN,\
+            self.right_distance_sensor = DistanceSensor(echo=R_SENSOR_ECHO_PIN,\
                                                     trigger=R_SENSOR_TRIGGER_PIN,\
                                                     queue_len=2,
                                                     pin_factory=factory)
-
+        else:
+             self.left_distance_sensor = None
+             self.right_distance_sensor = None
+            
         # Setup the encoders
-        self.left_encoder = EncoderCounter(L_ENCODER_PIN, "L")
-        self.right_encoder = EncoderCounter(R_ENCODER_PIN, "R")
-
+        if encoder:
+            self.left_encoder = EncoderCounter(L_ENCODER_PIN, "L")
+            self.right_encoder = EncoderCounter(R_ENCODER_PIN, "R")
+        else:
+            self.left_encoder = None
+            self.right_encoder = None
+            
         # Set up the Buzzer
         self.buzzer = Buzzer(BUZZER_PIN )
 
