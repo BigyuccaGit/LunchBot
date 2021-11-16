@@ -12,11 +12,11 @@ def ticks_to_mm(ticks):
     return int(ticks_to_mm_const * ticks)
 
 bot = Robot()
-stop_at_time = time.time() + 1
+stop_at_time = time.time() + 5
 
 logging.basicConfig(level=logging.INFO)
-bot.set_left(90)
-bot.set_right(90)
+bot.set_left(100)
+bot.set_right(100)
 
 while time.time() < stop_at_time:
     logger.info("Left: {} {} Right: {} {}".format(
@@ -25,6 +25,6 @@ while time.time() < stop_at_time:
         ticks_to_mm(bot.right_encoder.pulse_count),
         bot.right_encoder.pulse_count))
     time.sleep(0.05)
-
+bot.stop_all()
 quit()
 
