@@ -94,4 +94,4 @@ class ImuFusion:
         mag_yaw = -degrees(atan2(mag.y, mag.x))
 
         self.yaw = self.filter(self.yaw + gyro.z * dt, mag_yaw)
-        print(mag_yaw, self.yaw)
+#        print(mag_yaw, self.yaw)
