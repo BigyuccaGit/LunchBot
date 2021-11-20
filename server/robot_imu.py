@@ -4,8 +4,6 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-
-
 class ComplementaryFilter:
     def __init__(self, filter_left=0.9):
         self.filter_left = filter_left
@@ -29,7 +27,6 @@ class ComplementaryFilter:
         filtered = self.filter_left * left + \
                    self.filter_right * right
         return self.format_angle(filtered)
-
 
 class RobotImu:
     """Define a common interface to an inertial measurement unit with temperature"""
