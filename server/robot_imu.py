@@ -106,9 +106,9 @@ class ImuFusion:
         mag = mag.rotate(radians(self.pitch), vector(0, 1, 0))
         mag = mag.rotate(radians(self.roll), vector(1, 0, 0))
 
-        # Calculate raw yaw
+        # Calculate magnetic yaw
         mag_yaw = -degrees(atan2(mag.y, mag.x))
         
-        # Fusew with Gyro and Mag data
+        # Fuse with Gyro and Mag data
         self.yaw = self.complementary_filter(self.yaw + gyro.z * dt, mag_yaw)
 #        print(mag_yaw, self.yaw)
