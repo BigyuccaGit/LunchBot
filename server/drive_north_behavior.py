@@ -26,13 +26,8 @@ robot = Robot()
 # Set base spped
 base_speed = 70
 
-<<<<<<< HEAD
-# Lets head for this heading
-heading_set_point =45 # +ve is 'left'
-=======
 # Let's head for this heading
-heading_set_point = 0
->>>>>>> 4caec247d2af32cfe78e692eb9f3599a201ab063
+heading_set_point = 0 # +ve is 'left'
 
 while True:
     # Get the delta time
