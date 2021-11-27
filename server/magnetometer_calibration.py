@@ -20,6 +20,8 @@ scatter_zx = vp.gdots(color=vp.color.blue)
 #listz=[]
 
 #n=0
+mag_min = imu.read_magnetometer()
+mag_max = imu.read_magnetometer()
 while True:
     vp.rate(100)
 #    n=n+1
@@ -45,7 +47,7 @@ while True:
 #    mediany=median(listy)
 #    medianz=median(listz)
 
-    print(f"Magnetometer: {mag}. Offsets: {offset}.")
+    print(f"Magnetometer: {mag}. Offsets: {offset}. Min: {mag_min}. Max: {mag_max}")
 #    print(f"Magnetometer: {mag}. Means: {total/n}.")
 #    print(f"Magnetometer: {mag}. Medians: {vp.vector(medianx, mediany, medianz)}.")
     
