@@ -4,11 +4,13 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+# This class implements the complementary filter
 class ComplementaryFilter:
     def __init__(self, filter_left=0.9):
         self.filter_left = filter_left
         self.filter_right = 1.0 - filter_left
 
+    # Ensure angles in range -180 => 180
     @staticmethod
     def format_angle(angle):
         if angle < -180:
@@ -17,13 +19,19 @@ class ComplementaryFilter:
             angle -= 360
         return angle
 
+    # The filter function
     def filter(self, left, right):
+        # Ensure input in standard range
         right = self.format_angle(right)
         left = self.format_angle(left)
+        
+        # Check for wraparounds
         if left - right > 330:
             right += 360
         elif right - left > 330:
             left += 360
+            
+        # Do the filter
         filtered = self.filter_left * left + \
                    self.filter_right * right
         return self.format_angle(filtered)
@@ -41,7 +49,7 @@ class RobotImu:
         return self._imu.read_temperature()
 
     def read_gyroscope(self):
-        """Return prescaled gyro data"""
+        """Return calibrated gyro data"""
         _, _, _, x, y, z = self._imu.read_accelerometer_gyro_data()
  #       return vector(x, y, z)
         return vector(x, -y, -z) - self.gyro_offsets
@@ -63,7 +71,7 @@ class RobotImu:
         return pitch, roll
 
     def read_magnetometer(self):
-        """Return magnetometer data"""
+        """Return calibrated magnetometer data"""
         mag_x, mag_y, mag_z = self._imu.read_magnetometer_data()
 #        return vector(mag_x, -mag_y, -mag_z)
         return vector(mag_x, mag_y, mag_z) - self.mag_offsets
@@ -72,26 +80,41 @@ class RobotImu:
 class ImuFusion:
     def __init__(self, imu, filter_value=0.95):
         self.imu = imu
-        self.filter = ComplementaryFilter(filter_value).filter
+        self.complementary_filter = ComplementaryFilter(filter_value).filter
         self.pitch = 0
         self.roll = 0
         self.yaw = 0
 
+    #Update the readings
     def update(self, dt):
+        # Get accel readings
         accel_pitch, accel_roll = self.imu.read_accelerometer_pitch_and_roll()
+        
+        # Get Gyro readings
         gyro = self.imu.read_gyroscope()
+        
         # By filtering 95% gyro (which changes quickly, but drifts) with the 5% accel, which is absolute, but is slow when filtered
         # We get the best of both sensors.
 
-        self.pitch = self.filter(self.pitch + gyro.y * dt, accel_pitch)
-        self.roll = self.filter(self.roll + gyro.x * dt, accel_roll)
+        self.pitch = self.complementary_filter(self.pitch + gyro.y * dt, accel_pitch)
+        self.roll = self.complementary_filter(self.roll + gyro.x * dt, accel_roll)
+        
         # read the magnetometer
         mag = self.imu.read_magnetometer()
-        # Compensate for pitch and tilt
+        
+        # Compensate for pitch and tilt (roll)
         mag = mag.rotate(radians(self.pitch), vector(0, 1, 0))
         mag = mag.rotate(radians(self.roll), vector(1, 0, 0))
 
+        # Calculate magnetic yaw
         mag_yaw = -degrees(atan2(mag.y, mag.x))
+<<<<<<< HEAD
 
         self.yaw = self.filter(self.yaw + gyro.z * dt, mag_yaw)
         print("Mag Yaw: ", mag_yaw)
+=======
+        
+        # Fuse with Gyro and Mag data
+        self.yaw = self.complementary_filter(self.yaw + gyro.z * dt, mag_yaw)
+#        print(mag_yaw, self.yaw)
+>>>>>>> 4caec247d2af32cfe78e692eb9f3599a201ab063
