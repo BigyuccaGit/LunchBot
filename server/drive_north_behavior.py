@@ -1,9 +1,11 @@
 """This behavior will turn to seek north, and then drive that way"""
+print("Starting Imports")
 from robot_imu import RobotImu, ImuFusion
 from delta_timer import DeltaTimer
 from pid_controller import PIController
 from robot import Robot
 import imu_settings
+print("Ending Imports")
 
 
 imu = RobotImu(mag_offsets=imu_settings.mag_offsets,
@@ -15,7 +17,7 @@ robot = Robot()
 base_speed = 70
 
 # Lets head for this heading
-heading_set_point = 0
+heading_set_point =45 # +ve is 'left'
 
 while True:
     dt, elapsed = timer.update()
