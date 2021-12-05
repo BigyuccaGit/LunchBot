@@ -7,6 +7,8 @@ import logging
 import sys
 from icm20948 import ICM20948
 import math
+from robot_imu import RobotImu
+from delta_timer import DeltaTimer
 
 file_handler = logging.FileHandler(filename='robot.log',mode='w')
 stdout_handler = logging.StreamHandler(sys.stdout)
@@ -30,6 +32,10 @@ class ObstacleAvoidance:
         self.acc_threshold = 3.0
         self.acc_threshold_mag = self.acc_threshold * self.acc_threshold
         self.collided = False
+        self.robot_imu = RobotImu()
+        self.delta = DeltaTimer()
+        self.spin_angle = 90 + 45
+        self.slow_spin_speed = 60
         
        # Ensure it will stop
         atexit.register(self.robot.stop_all)
@@ -52,11 +58,12 @@ class ObstacleAvoidance:
 #        r_led_bar = self.distance_to_led_bar(right_distance)
 #        start = (self.robot.leds.count - 1) - r_led_bar
         #logger.info(f"LEDS  {l_led_bar} ({left_distance*100:.0f}) {r_led_bar} ({right_distance*100:.0f}) {collided}")
-        logger.info(f"TEST  ({left_distance*100:.0f}) ({right_distance*100:.0f})")
+#        logger.info(f"TEST  ({left_distance*100:.0f}) ({right_distance*100:.0f})")
 
 #        self.robot.leds.set_range(range(start, self.robot.leds.count-1), self.sense_colour)
         # Now show
 #        self.robot.leds.show()
+        None
 
     # Have we collided with something
     def colliding(self):
@@ -77,18 +84,56 @@ class ObstacleAvoidance:
         if self.buzzer_enabled:
             self.buzzer.off()
         
+#    def right_spin(self):
+#        logger.info("RIGHT SPIN")
+#        self.robot.speeds(100,-100)
+#        sleep(1.0)
+#        self.robot.stop()
+
     def right_spin(self):
-        logger.info("RIGHT SPIN")
-        self.robot.speeds(100,-100)
-        sleep(1.0)
+        
+        logger.info("RIGHT SPIN ANGLE")
+        yaw=0.0
+        while -yaw < self.spin_angle:
+            sleep(0.001)
+            dt,elapsed = self.delta.update()
+            gyro=self.robot_imu.read_gyroscope()
+            yaw += gyro.z * dt
+
+            if self.spin_angle + yaw > 30:
+                speed = 100
+            else:
+                speed = self.slow_spin_speed
+        
+            self.robot.speeds(speed, -speed)
+            
         self.robot.stop()
-  
+
+#    def left_spin(self):
+#        logger.info("LEFT SPIN")
+#        self.robot.speeds(-100,100)
+#        sleep(1.0)
+#        self.robot.stop()
+
     def left_spin(self):
-        logger.info("LEFT SPIN")
-        self.robot.speeds(-100,100)
-        sleep(1.0)
+        
+        logger.info("LEFT SPIN ANGLE")
+        yaw=0.0
+        while yaw < self.spin_angle:
+            sleep(0.001)
+            dt,elapsed = self.delta.update()
+            gyro=self.robot_imu.read_gyroscope()
+            yaw += gyro.z * dt
+
+            if self.spin_angle - yaw > 30:
+                speed = 100
+            else:
+                speed = self.slow_spin_speed
+            
+            self.robot.speeds(-speed, speed)
+            
         self.robot.stop()
-  
+    
     def random_spin(self):
         heads_or_tails = random.randint(0,1)
         [self.left_spin, self.right_spin][heads_or_tails]()
@@ -147,7 +192,7 @@ class ObstacleAvoidance:
             
             self.spin_option()    
 
-bot=Robot(encoder=True)
+bot=Robot(encoder=False)
 behaviour=ObstacleAvoidance(bot)
 behaviour.buzzer_enabled = False
 
