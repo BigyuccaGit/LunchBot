@@ -8,7 +8,7 @@ imu=RobotImu()
 delta=DeltaTimer()
 
 try:
-    angle=90
+    angle=90+45
     yaw=0.0
     speed = 100
     while yaw < angle:
