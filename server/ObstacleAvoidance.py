@@ -9,6 +9,7 @@ from icm20948 import ICM20948
 import math
 from robot_imu import RobotImu
 from delta_timer import DeltaTimer
+import imu_settings
 
 file_handler = logging.FileHandler(filename='robot.log',mode='w')
 stdout_handler = logging.StreamHandler(sys.stdout)
@@ -25,6 +26,8 @@ class ObstacleAvoidance:
         self.l_sensor = self.robot.left_distance_sensor
         self.buzzer = self.robot.buzzer
         self.buzzer_enabled = True
+        self.r_led = self.robot.right_led
+        self.l_led = self.robot.left_led
         # Calcs for LEDs
         self.led_half = int(self.robot.leds.count/2)
         self.sense_colour = 255,0,0
@@ -32,7 +35,8 @@ class ObstacleAvoidance:
         self.acc_threshold = 3.0
         self.acc_threshold_mag = self.acc_threshold * self.acc_threshold
         self.collided = False
-        self.robot_imu = RobotImu()
+        self.robot_imu = RobotImu(mag_offsets=imu_settings.mag_offsets,
+               gyro_offsets=imu_settings.gyro_offsets)
         self.delta = DeltaTimer()
         self.spin_angle = 90 + 45
         self.slow_spin_speed = 60
@@ -93,6 +97,7 @@ class ObstacleAvoidance:
     def right_spin(self):
         
         logger.info("RIGHT SPIN ANGLE")
+        self.r_led.blink(0.2, 0.2)
         yaw=0.0
         while -yaw < self.spin_angle:
             sleep(0.001)
@@ -108,6 +113,7 @@ class ObstacleAvoidance:
             self.robot.speeds(speed, -speed)
             
         self.robot.stop()
+        self.r_led.off()
 
 #    def left_spin(self):
 #        logger.info("LEFT SPIN")
@@ -118,6 +124,7 @@ class ObstacleAvoidance:
     def left_spin(self):
         
         logger.info("LEFT SPIN ANGLE")
+        self.l_led.blink(0.2, 0.2)
         yaw=0.0
         while yaw < self.spin_angle:
             sleep(0.001)
@@ -133,6 +140,7 @@ class ObstacleAvoidance:
             self.robot.speeds(-speed, speed)
             
         self.robot.stop()
+        self.l_led.off()
     
     def random_spin(self):
         heads_or_tails = random.randint(0,1)
