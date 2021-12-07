@@ -124,7 +124,7 @@ class ObstacleAvoidance:
             for item in items:
                 s += str(item) + " "
 
-            logger.info(s)
+  #          logger.info(s)
             
 
 #    def left_spin(self):
@@ -164,7 +164,7 @@ class ObstacleAvoidance:
             for item in items:
                 s += str(item) + " "
 
-            logger.info(s)
+   #         logger.info(s)
             
    
     def random_spin(self):
