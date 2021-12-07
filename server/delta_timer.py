@@ -11,3 +11,8 @@ class DeltaTimer:
         elapsed = current - self.start
         self.last = current
         return dt, elapsed
+
+    def reset(self):
+        self.last = self.start = time.time()
+
+       
