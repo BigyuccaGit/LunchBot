@@ -98,9 +98,11 @@ class ObstacleAvoidance:
         
         logger.info("RIGHT SPIN ANGLE")
         self.r_led.blink(0.2, 0.2)
+        debug=[]
         yaw=0.0
+        self.delta.reset()
         while -yaw < self.spin_angle:
-            sleep(0.001)
+            sleep(0.01)
             dt,elapsed = self.delta.update()
             gyro=self.robot_imu.read_gyroscope()
             yaw += gyro.z * dt
@@ -109,11 +111,21 @@ class ObstacleAvoidance:
                 speed = 100
             else:
                 speed = self.slow_spin_speed
-        
             self.robot.speeds(speed, -speed)
+            
+            items=[elapsed, dt, yaw, gyro.z, speed]
+            debug.append(items)
             
         self.robot.stop()
         self.r_led.off()
+
+        for items in debug:
+            s="RIGHT DEBUG "
+            for item in items:
+                s += str(item) + " "
+
+            logger.info(s)
+            
 
 #    def left_spin(self):
 #        logger.info("LEFT SPIN")
@@ -125,9 +137,11 @@ class ObstacleAvoidance:
         
         logger.info("LEFT SPIN ANGLE")
         self.l_led.blink(0.2, 0.2)
+        debug=[]
         yaw=0.0
+        self.delta.reset()
         while yaw < self.spin_angle:
-            sleep(0.001)
+            sleep(0.01)
             dt,elapsed = self.delta.update()
             gyro=self.robot_imu.read_gyroscope()
             yaw += gyro.z * dt
@@ -136,12 +150,23 @@ class ObstacleAvoidance:
                 speed = 100
             else:
                 speed = self.slow_spin_speed
+
+            items=[elapsed, dt, yaw, gyro.z, speed]
+            debug.append(items)
             
             self.robot.speeds(-speed, speed)
             
         self.robot.stop()
         self.l_led.off()
-    
+        
+        for items in debug:
+            s="LEFT DEBUG "
+            for item in items:
+                s += str(item) + " "
+
+            logger.info(s)
+            
+   
     def random_spin(self):
         heads_or_tails = random.randint(0,1)
         [self.left_spin, self.right_spin][heads_or_tails]()
