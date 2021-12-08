@@ -7,9 +7,10 @@ import logging
 import sys
 from icm20948 import ICM20948
 import math
-from robot_imu import RobotImu
+from robot_imu import RobotImu, ImuFusion
 from delta_timer import DeltaTimer
 import imu_settings
+from pid_controller import PIController
 
 file_handler = logging.FileHandler(filename='robot.log',mode='w')
 stdout_handler = logging.StreamHandler(sys.stdout)
@@ -40,6 +41,8 @@ class ObstacleAvoidance:
         self.delta = DeltaTimer()
         self.spin_angle = 90 + 45
         self.slow_spin_speed = 60
+        self.fusion = ImuFusion(self.robot_imu)
+        self.pid = PIController(0.7, 0.01)
         
        # Ensure it will stop
         atexit.register(self.robot.stop_all)
@@ -176,24 +179,46 @@ class ObstacleAvoidance:
         return [self.random_spin, self.right_spin, self.left_spin, self.random_spin][option]
 #                 failsafe,         left sensor,     right sensor,     both sensors
 
-    def run(self):
+    def forwards(self, angle):
+        base_speed=70
+        heading_set_point = angle
+        self.delta.reset()
+        
+        logger.info(f"FORWARD {self.r_sensor.in_range} {self.r_sensor.distance*100:.0f} {self.l_sensor.in_range} {self.l_sensor.distance*100:.0f}")
 
-        logging.basicConfig(level=logging.INFO, handlers=handlers, format='%(name)s %(levelname)s:%(asctime)s %(message)s')
+        # Provided object not in range or we have a collision
+        while (not self.r_sensor.in_range and not self.l_sensor.in_range) and (not self.colliding()) :
+
+            # Get the delta time
+            dt, elapsed = self.delta.update()
+
+            # Get next set of (fused) readings
+            self.fusion.update(dt)
+
+            # Note error in heading
+            heading_error = self.fusion.yaw - heading_set_point
+
+            # Calculate steering correction using PIC
+            steer_value = self.pid.get_value(heading_error, delta_time=dt)
+  #          print(f"Error: {heading_error}, Value:{steer_value:2f}, t: {elapsed}")
+
+            # Perform steering correction
+            self.robot.set_left(base_speed + steer_value)
+            self.robot.set_right(base_speed - steer_value)
+
+    def old_forwards(self):
         
-        acc_threshold = 3.0
-        dt=0.01
-        
-        while True:
-            
             # Send robot forward
             logger.info(f"FORWARD {self.r_sensor.in_range} {self.r_sensor.distance*100:.0f} {self.l_sensor.in_range} {self.l_sensor.distance*100:.0f}")
+
+            dt = 0.01
+            
             self.robot.forward()
 
-            # Wait for object to come in range
+            # While object not in range
             t=time.time()
             inc=0
             while (not self.r_sensor.in_range and not self.l_sensor.in_range) and (not self.colliding()) :
-            
 #            while (not self.r_sensor.in_range and not self.l_sensor.in_range):
             
                 left_distance = self.l_sensor.distance
@@ -204,6 +229,38 @@ class ObstacleAvoidance:
                     self.display_state(left_distance, right_distance)#, self.l_sensor.in_range, self.r_sensor.in_range )
                 t=t+dt
                 sleep(max(0, t-time.time()) ) 
+        
+    def run(self):
+
+        # Setup basic logger stuff
+        logging.basicConfig(level=logging.INFO, handlers=handlers, format='%(name)s %(levelname)s:%(asctime)s %(message)s')
+        
+#        dt=0.01
+        
+        while True:
+
+#            self.old_forwards()
+            self.forwards(0)
+            
+ #           # Send robot forward
+ #           logger.info(f"FORWARD {self.r_sensor.in_range} {self.r_sensor.distance*100:.0f} {self.l_sensor.in_range} {self.l_sensor.distance*100:.0f}")
+ #           self.robot.forward()
+
+            # Wait for object to come in range
+ #           t=time.time()
+ #           inc=0
+ #           while (not self.r_sensor.in_range and not self.l_sensor.in_range) and (not self.colliding()) :
+            
+#            while (not self.r_sensor.in_range and not self.l_sensor.in_range):
+            
+ #               left_distance = self.l_sensor.distance
+ #               right_distance = self.r_sensor.distance
+
+ #               inc += 1
+ #               if inc % 1 == 0:
+ #                   self.display_state(left_distance, right_distance)#, self.l_sensor.in_range, self.r_sensor.in_range )
+ #               t=t+dt
+ #               sleep(max(0, t-time.time()) ) 
 
             # Stop the robot
             self.collided = False
