@@ -2,9 +2,12 @@ import gpiozero
 import time
 import sys
 
-speed=float(sys.argv[1])
-
-print("Speed is ", speed)
+if len(sys.argv) > 1:
+    speed=min(float(sys.argv[1]),1)
+else:
+    speed=1
+    
+print("Speed is ", speed, "Argv length = ", len(sys.argv))
 
 motorr = gpiozero.Motor(forward=27, backward=17)
 motorl = gpiozero.Motor(forward=24, backward=23)
