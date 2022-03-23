@@ -28,8 +28,8 @@ logger = logging.getLogger("test_encoder")
 motorl = Motor(forward=24, backward=23)
 motorr = Motor(forward=27, backward=17)
 
-rotorl = EncoderCounter(8,'L')
-rotorr = EncoderCounter(7,'R')
+rotorl = EncoderCounter(7,'L')
+rotorr = EncoderCounter(8,'R')
 
 factory = PiGPIOFactory()
  
@@ -71,7 +71,8 @@ while time.time() < stop_at_time:
 #     print(time.time(), rotorr.pulse_count, rotorr.pulse_delta)
      elapsed = time.time()-start_time
 #     print( f"dummy {elapsed}")
-     logger.info(f"{elapsed:.2f} {rotorl.pulse_delta:10d} {rotorl.pulse_delta2:4d} {rotorl.smoothed_pulse_delta:6d} {rotorl.smoothed_pulse_delta2:4d} {lsensor.distance*100:6.1f} {rotorr.pulse_delta:10d} {rotorl.pulse_delta2:4d} {rotorr.smoothed_pulse_delta:6d} {rotorr.smoothed_pulse_delta2:4d} {rsensor.distance*100:6.1f}")
+#     logger.info(f"{elapsed:.2f} {rotorl.pulse_delta:10d} {rotorl.pulse_delta2:4d} {rotorl.smoothed_pulse_delta:6d} {rotorl.smoothed_pulse_delta2:4d} {lsensor.distance*100:6.1f} {rotorr.pulse_delta:10d} {rotorl.pulse_delta2:4d} {rotorr.smoothed_pulse_delta:6d} {rotorr.smoothed_pulse_delta2:4d} {rsensor.distance*100:6.1f}")
+     logger.info(f"{elapsed:.2f} {rotorl.pulse_count:10d} {lsensor.distance*100:6.1f} {rotorr.pulse_count:10d} {rsensor.distance*100:6.1f}")
            
  #    vp.rate(10)
  #    temp.graph.plot(elapsed, smoothed_pulse_delta)

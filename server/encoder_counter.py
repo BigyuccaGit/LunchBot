@@ -72,7 +72,7 @@ class EncoderCounter():
 #        return sum(self.buffer_delta2)
 
     # Define method called on detection of pulse count
-    def when_changed(self, time_ticks, state):
+    def when_changed(self, _, state):
         self.pulse_count += self.direction
 
     # Defines direction we are going (1 = forward)
