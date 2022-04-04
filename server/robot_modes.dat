@@ -6,3 +6,4 @@ left_led, Left Led, left_led.py, False
 right_led, Right Led, right_led.py, False
 backwards, Backwards, backwards.py, False
 ObsAvoid, Obstacle Avoidance, ObstacleAvoidance.py, False
+Controller, Controller, controller.py, False
