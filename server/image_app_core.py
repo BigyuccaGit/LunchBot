@@ -63,7 +63,7 @@ def put_output_image(encoded_bytes):
 
 # Function to get control messages from the queue
 def get_control_instruction():
-    # Don't wait of nothing in the queue
+    # Don't wait if nothing in the queue
     if control_queue.empty():
         return None
     else:

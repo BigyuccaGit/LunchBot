@@ -1,7 +1,20 @@
 from approxeng.input.selectbinder import ControllerResource
+from pins import *
+from gpiozero import Buzzer, LED
 
 class HomePressed(Exception):
     pass
+
+
+buzzer=Buzzer(BUZZER_PIN)
+buzzer.off()
+
+r_led=LED(R_LED_PIN)
+r_led.off()
+l_led=LED(L_LED_PIN)
+l_led.off()
+
+sq_count=0
 
 try:
     while True:
@@ -27,6 +40,28 @@ try:
                     if joystick.has_presses:
                         print("Pressed")
                         print(joystick.presses)
+
+                    if joystick.presses.circle:
+                        print("Circle pressed")
+                        buzzer.on()
+
+                    if joystick.releases.circle:
+                        print("Circle released")
+                        buzzer.off()
+                    
+                    if joystick.presses.square:
+                        print("Square pressed ", sq_count)
+                        if r_led.is_lit:
+                            r_led.off()
+                        else:
+                            r_led.on()
+                            
+                        if l_led.is_lit:
+                            l_led.off()
+                        else:
+                            l_led.on()
+
+                        sq_count += 1
                     
                     if joystick.presses.home:
                         raise HomePressed()
@@ -41,5 +76,8 @@ try:
             
 except HomePressed:
     print("Home pressed")
+    buzzer.off()
+    r_led.off()
+    l_led.off()
            
 
